@@ -1,5 +1,8 @@
 package javase02.t01;
 
+// Задание 1. Принципы ООП, простейшие классы и объекты
+// Разработайте спецификацию и создайте класс Ручка (Pen). Определите в этом классе методы equals(), hashCode() и toString().
+
 public class Pen {
     int price;
     String producerName;
@@ -13,7 +16,7 @@ public class Pen {
     // сравнивает между собой два объекта класса Pen
     @Override
     public boolean equals(Object obj) {
-        if ( getClass() != obj.getClass() ) return false;
+        if ( getClass() != obj.getClass() ) return false;  //сравнение классов 
         else {
             Pen pen = (Pen) obj;
             if ( (price == pen.price) & (producerName == pen. producerName) ) return true;
@@ -29,7 +32,7 @@ public class Pen {
 
     // выводит в строку содержимое объекта класса Pen
     public String toString() {
-        return getClass().getName() + "@" + "price: " + price + ", producerName: " + producerName;
+        return getClass().getName() + "; price: " + price + "; producerName: " + producerName;
     }
 
     public static void main(String[] args) {
@@ -38,12 +41,15 @@ public class Pen {
         
         Pen onePen = new Pen(25, "Kohinoor");
         Pen twoPen = new Pen(ind, str);
-        Pen threePen = new Pen(26, "Kohinoor");
-        System.out.println(onePen.toString());
-        System.out.println("onePen.equals(twoPen) = " + onePen.equals(twoPen));
-        System.out.println("onePen.equals(threePen) = " + onePen.equals(threePen));       
-        System.out.println(onePen.hashCode());        
-        System.out.println(twoPen.hashCode());       
+        Pen threePen = new Pen(265, "Parker");
+        System.out.println("\nonePen.toString() is: " + onePen.toString());
+		System.out.println("twoPen.toString() is: " + twoPen.toString());
+		System.out.println("threePen.toString() is: " + threePen.toString());
+		
+        System.out.println("\nonePen.equals(twoPen) is: " + onePen.equals(twoPen));
+        System.out.println("onePen.equals(threePen) is: " + onePen.equals(threePen));       
+        System.out.println("\nonePen.hashCode() is: " + onePen.hashCode());        
+        System.out.println("twoPen.hashCode() is: " + twoPen.hashCode());       
     }
     
 }
