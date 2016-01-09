@@ -1,5 +1,22 @@
-package javase02.t04;
+package javase02.t05;
 import java.util.*;
+
+/* 
+Разработайте приложение, позволяющее формировать группы студентов по разным дисциплинам. Состав групп может быть разным.
+Каждая дисциплина в отдельности определяет, целыми или вещественными будут оценки по нет.
+Необходимо найти группы, в которые входит студент X, и сравнить его оценки.
+Для огранизации перечня дисциплин можно использовать перечисление.
+
+
+Класс Student - поля Имя, деньрожденье + любая информация о студентусе
+ArrayList<Student> Students - список студентов
+Класс Оценка. поля: Студент (ссылка на студента из списка), тип оценки (зачет int или оценка boolean), сама оценка по предмету 
+ArrayList<Оценка> Оценки - список студентов по данному предмету
+enum Предметы - ПРЕДМЕТ(ArrayList Оценки )
+Поиск получает строку Имя, пробегается по ПРЕДМЕТам и выдает строку предмет - оценка.
+ */
+
+
 
 interface Outer {
 	public String outString();
@@ -7,86 +24,10 @@ interface Outer {
 	public String outProductType();
 }
 
-abstract class Stationery implements Outer {
-    String productType;
-	String producerName;
-	int quantity;
-	float price;
-
-    public Stationery(String productType, String producerName, int quantity, float price) {
-        this.productType = productType;
-        this.producerName = producerName;
-		this.quantity = quantity;
-		this.price = price;
-    }
+class Student {
+	String name;
 	
-	public String outString() {
-		return getClass().getName();
-	}
-	
-	public float outPrice() { return price; }
-	
-	public String outProductType() { return productType; }
-}
-
-class Pen extends Stationery {
-	String[] colors = {"blue", "black", "red"};
-	String color;
-	
-	public Pen(String producerName, int quantity, float price, int col) {
-		super("Pen", producerName, quantity, price);
-		color = colors[col];
-	}
-	
-	public String outString() {
-	return quantity + " " + color + " " + productType + " of \"" + producerName + "\" price: " + price;
-    }
-}
-
-// подкласс 2 уровня 
-class InkPen extends Pen {
-	String[] types = {"standart", "premium"};
-	String type;
-	
-	public InkPen(String producerName, int quantity, float price, int col, int ind) {
-		super(producerName, quantity, price, col);
-		productType = "Ink pen";
-		type = types[ind];
-	}
-		
-	public String outString() {
-	return quantity + " " + color + " " + productType + " " + type + "-class of \"" + producerName + "\" price: " + price;
-	}
-}
-
-class Pencil extends Stationery {
-	String[] types = {"wooden", "plactic"};
-	String type;
-	
-	public Pencil(String producerName, int quantity, float price, int t) {
-		super("Pencil", producerName, quantity, price);
-		type = types[t];
-	}
-	
-	public String outString() {
-	return quantity + " " + type + " " + productType + " of \"" + producerName + "\" price: " + price;
-	}
-}
-
-// подкласс 2 уровня 
-class MechPencil extends Pencil {
-	float[] diameters = {0.5f, 0.7f};
-	float dia;
-	
-	public MechPencil(String producerName, int quantity, float price, int d) {
-		super(producerName, quantity, price, 1);
-		productType = "Mechanic pencil";
-		dia = diameters[d];
-	}
-	
-	public String outString() {
-	return quantity + " " + type + " " + productType + " diameter = " + dia + " of \"" + producerName + "\" price: " + price;
-	}
+	public Student ()
 }
 
 class Bubble {
