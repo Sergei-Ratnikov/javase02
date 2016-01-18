@@ -1,10 +1,12 @@
+/* 
+Разработайте приложение, позволяющее формировать группы студентов по разным дисциплинам. Состав групп может быть разным.
+Каждая дисциплина в отдельности определяет, целыми или вещественными будут оценки по нет.
+Необходимо найти группы, в которые входит студент X, и сравнить его оценки.
+Для огранизации перечня дисциплин можно использовать перечисление.
+*/
+
 package javase02.t05;
 import java.util.*;
-
-/* interface IOuser {
-	void addGrade(); // добавить оценку
-}
- */
 
 enum Discipline { HERBOLOGY("HERBOLOGY", "pass"), POTIONS("POTIONS", "pass"),
 	TRANSFIGURATION("TRANSFIGURATION", "grade"), CHARMS("CHARMS", "grade"), ARITHMANCY("ARITHMANCY", "grade");
@@ -28,7 +30,6 @@ enum Discipline { HERBOLOGY("HERBOLOGY", "pass"), POTIONS("POTIONS", "pass"),
 }
 
 // Класс Grade (оценка). поля: Предмет (ссылка на String enum Subjects), тип оценки (зачет int или оценка boolean), сама оценка по предмету
-
 class Grade {
 
 	Discipline dis;
@@ -55,16 +56,16 @@ class Grade {
 		if ( dis.typeOf() == "pass" ) {
 			return dis.toString() + " - " + pass;
 		}
-		else /* if ( dis.typeOf() == "grade" ) */ {
+		else {
 			return dis.toString() + " - " + grade;			
 		}		
 	}
 	
 }
 
-class Student /* implements IOuser  */{
-	String name = null; //значение по умолчанию
-	int age = 0;
+class Student {
+	String name;
+	int age;
 	ArrayList<Grade> grades = new ArrayList(); // список оценок студента
 
 	public Student(String name, int age) { this.name = name; this.age = age; }
@@ -79,12 +80,12 @@ class Student /* implements IOuser  */{
 				finder = false;
 			}
 		}
-		
-		if (finder) {
+
+		if (finder) {					// если нет совпадений, то в список добавляется новый предмет
 			Grade g = new Grade();
 			g.addGrade(d, pass);
 			grades.add(g);
-		} 	// если нет совпадений, то в список добавляется новый предмет
+		}
 	}
 
 	
@@ -99,17 +100,15 @@ class Student /* implements IOuser  */{
 			}
 		}
 		
-		if (finder) {
+		if (finder) {					// если нет совпадений, то в список добавляется новый предмет
 			Grade g = new Grade();
 			g.addGrade(d, grade);
 			grades.add(g);
-		} 	// если нет совпадений, то в список добавляется новый предмет
+		}
 	}
-	
-	
 }
 
-class Students /* implements IOuser */ {
+class Students {
 	static ArrayList<Student> students = new ArrayList();
 	public Students(Student s) { students.add(s); }
 	
@@ -132,8 +131,6 @@ class Students /* implements IOuser */ {
 				Student s = students.get(i);
 				s.addGrade(d, pass);
 				students.set(i, s);
-				
-				/* students.set(i, students.get(i).addGrade(d, pass) ); */
 			}
 		}
 	}
@@ -144,8 +141,6 @@ class Students /* implements IOuser */ {
 				Student s = students.get(i);
 				s.addGrade(d, grade);
 				students.set(i, s);
-				
-				/* students.set(i, students.get(i).addGrade(d, grade) ); */				
 			}
 		}
 	}	
@@ -172,8 +167,6 @@ class Students /* implements IOuser */ {
 	}
 	
 }
-
-
  
 class Main {
 	public static void main(String[] args)	{
@@ -182,9 +175,9 @@ class Main {
 		Students.addStudent("Harry Potter", 12);
 		Students.addStudent("Ronald Weasley", 12);		
 
-		Students.addStudent("Ronald Weasley", 12);	
+		Students.addStudent("Ronald Weasley", 12);	// пробуем добавить Рона еще раз
 		
-		Students.addGrade("Harry Potter", "HERBOLOGY", true);
+		Students.addGrade("Harry Potter", "HERBOLOGY", true); 
 		Students.addGrade("Harry Potter", "CHARMS", 4);
 		
 		Students.addGrade("Ronald Weasley", "POTIONS", true);
@@ -197,14 +190,14 @@ class Main {
 		Students.addGrade("Hermione Granger", "CHARMS", 5);  //У Гермионы есть маховик времени, она ходит на все уроки
 		
 
-
-		
 		System.out.println("----------------\n");
 		Students.printStudent("Hermione Granger");
 		System.out.println("-----------------\n");
+		
 		Students.addGrade("Hermione Granger", "ARITHMANCY", 5); //Гермиона исправила четверку по нумерологии
 		Students.printStudent("Hermione Granger");
 		System.out.println("-----------------\n");
+		
 		Students.printStudent("Ronald Weasley");
 		System.out.println("-----------------\n");
 	}
