@@ -1,73 +1,211 @@
 package javase02.t05;
 import java.util.*;
 
-/* 
-Разработайте приложение, позволяющее формировать группы студентов по разным дисциплинам. Состав групп может быть разным.
-Каждая дисциплина в отдельности определяет, целыми или вещественными будут оценки по нет.
-Необходимо найти группы, в которые входит студент X, и сравнить его оценки.
-Для огранизации перечня дисциплин можно использовать перечисление.
-
-
-Класс Student - поля Имя, деньрожденье + любая информация о студентусе
-ArrayList<Student> Students - список студентов
-Класс Оценка. поля: Студент (ссылка на студента из списка), тип оценки (зачет int или оценка boolean), сама оценка по предмету 
-ArrayList<Оценка> Оценки - список студентов по данному предмету
-enum Предметы - ПРЕДМЕТ(ArrayList Оценки )
-Поиск получает строку Имя, пробегается по ПРЕДМЕТам и выдает строку предмет - оценка.
+/* interface IOuser {
+	void addGrade(); // добавить оценку
+}
  */
 
+enum Discipline { HERBOLOGY("HERBOLOGY", "pass"), POTIONS("POTIONS", "pass"),
+	TRANSFIGURATION("TRANSFIGURATION", "grade"), CHARMS("CHARMS", "grade"), ARITHMANCY("ARITHMANCY", "grade");
 
-
-interface Outer {
-	public String outString();
-	public float outPrice();
-	public String outProductType();
-}
-
-class Student {
-	String name;
+	private final String title;
+	private final String type;
 	
-	public Student ()
-}
-
-class Bubble {
-	static ArrayList sortPrice(ArrayList<Outer> inputList) {
-		int a, b, s;
-		s = inputList.size() - 1; // s - порядковый номер последнего элемента коллекции
-		inputList.add(inputList.get(0)); // добавление элемента массива для сортировки
-		for( a = 1; a < s ; a++)
-			for( b = (s - 1); b >= a; b--) {
-				if( inputList.get(b-1).outPrice() > inputList.get(b).outPrice() ) { // если требуемый порядок следования не соблюдается, поменять элементы местами
-					// замена
-					inputList.set((s + 1), inputList.get(b - 1));
-					inputList.set((b - 1), inputList.get(b));
-					inputList.set(b, inputList.get(s + 1));
-				}
-			}	
-		inputList.remove(s + 1); // удаление элемента массива для сортировки
-		
-		return inputList;
+	private Discipline(String title, String type) {
+		this.title = title;
+		this.type = type;
+	}
+	
+	@Override
+	public String toString(){
+		return title;
+	}
+	
+	public String typeOf(){
+		return type;
 	}
 }
 
-public class Main {
-	@SuppressWarnings("unchecked")
-	public static void main(String[] args) {
+// Класс Grade (оценка). поля: Предмет (ссылка на String enum Subjects), тип оценки (зачет int или оценка boolean), сама оценка по предмету
 
-		ArrayList<Outer> BaseList = new ArrayList();
-		BaseList.add(new Pen("Corvina", 1, 1.25f, 0));
-		BaseList.add(new Pen("Komus", 2, 1.55f, 1));
-		BaseList.add(new Pencil("Kohinoor", 3, 0.25f, 0));
-		BaseList.add(new Pen("Pilot", 4, 1.75f, 2));
-		
-		System.out.println("\nUnsorted base set:");
-		for(int i = 0; i < BaseList.size(); i++)
-			System.out.println((BaseList.get(i)).outString());
+class Grade {
 
-		BaseList = Bubble.sortPrice(BaseList);
+	Discipline dis;
+	int grade;
+	boolean pass;
+
+	public void addGrade(String d, boolean pass) {
+		Discipline disTemporary = Discipline.valueOf(d);
+		if ( disTemporary.typeOf() == "pass" ) {
+				dis = Discipline.valueOf(d);
+				this.pass = pass;
+			}
+	}
+	public void addGrade(String d, int grade) {
+		Discipline disTemporary = Discipline.valueOf(d);
+		if ( disTemporary.typeOf() == "grade" ) {
+				dis = Discipline.valueOf(d);
+				this.grade = grade;
+		}
+	}
+	
+	@Override
+	public String toString() {
+		if ( dis.typeOf() == "pass" ) {
+			return dis.toString() + " - " + pass;
+		}
+		else /* if ( dis.typeOf() == "grade" ) */ {
+			return dis.toString() + " - " + grade;			
+		}		
+	}
+	
+}
+
+class Student /* implements IOuser  */{
+	String name = null; //значение по умолчанию
+	int age = 0;
+	ArrayList<Grade> grades = new ArrayList(); // список оценок студента
+
+	public Student(String name, int age) { this.name = name; this.age = age; }
+
+	public void addGrade(String d, boolean pass) { 			//дисциплина, зачет
+		boolean finder = true;								// маркер совпадений при поиске
+		for (int i = 0; i  < grades.size(); i++ ) { 	// поиск предмета в зачетке студента
+			if (grades.get(i).dis.toString() == d) {		// если предмет уже есть в списке, то происходит замена оценки
+				Grade g = new Grade();
+				g.addGrade(d, pass);
+				grades.set(i, g);
+				finder = false;
+			}
+		}
 		
-		System.out.println("\nBase set sorted by price:");
-		for(int i = 0; i < BaseList.size(); i++)
-			System.out.println((BaseList.get(i)).outString());
+		if (finder) {
+			Grade g = new Grade();
+			g.addGrade(d, pass);
+			grades.add(g);
+		} 	// если нет совпадений, то в список добавляется новый предмет
+	}
+
+	
+	public void addGrade(String d, int grade) { 			//дисциплина, оценка
+		boolean finder = true;								// маркер совпадений при поиске
+		for (int i = 0; i  < grades.size(); i++ ) { 	// поиск предмета в зачетке студента
+			if (grades.get(i).dis.toString() == d) {		// если предмет уже есть в списке, то происходит замена оценки
+				Grade g = new Grade();
+				g.addGrade(d, grade);
+				grades.set(i, g);
+				finder = false;
+			}
+		}
+		
+		if (finder) {
+			Grade g = new Grade();
+			g.addGrade(d, grade);
+			grades.add(g);
+		} 	// если нет совпадений, то в список добавляется новый предмет
+	}
+	
+	
+}
+
+class Students /* implements IOuser */ {
+	static ArrayList<Student> students = new ArrayList();
+	public Students(Student s) { students.add(s); }
+	
+	static void addStudent(String name, int age) { 
+		boolean finder = true;	
+		for (int i = 0; i < students.size(); i++) { // поиск студента, проверка на совпадение имен
+			if (students.get(i).name == name ) { finder = false; }
+		}
+
+		if (finder) { 
+			students.add(new Student(name, age) );		// если нет совпадений, то в список добавляется новый студент
+			System.out.println("Student " + name + " added!");
+		}
+		else System.out.println("\n\tSomeone used Polyjuice potion!\n"); // если есть совпадение - кто-то использует оборотное зелье
+	}
+
+	static void addGrade(String n, String d, boolean pass) { // имя студента, предмет, зачет
+		for (int i = 0; i < students.size(); i++) { // поиск студента
+			if (students.get(i).name == n) {
+				Student s = students.get(i);
+				s.addGrade(d, pass);
+				students.set(i, s);
+				
+				/* students.set(i, students.get(i).addGrade(d, pass) ); */
+			}
+		}
+	}
+
+	static void addGrade(String n, String d, int grade) { // имя студента, предмет, оценка
+		for (int i = 0; i < students.size(); i++) { // поиск студента
+			if (students.get(i).name == n) {
+				Student s = students.get(i);
+				s.addGrade(d, grade);
+				students.set(i, s);
+				
+				/* students.set(i, students.get(i).addGrade(d, grade) ); */				
+			}
+		}
+	}	
+
+	static Student getStudent(String n) {
+		Student s = null;
+		for (int i = 0; i < students.size(); i++) { // поиск студента
+			if (students.get(i).name == n) { s = students.get(i); }
+		}
+		return s;
+	}
+	
+	static void printStudent(String n) {
+		for (int i = 0; i < students.size(); i++) { // поиск студента
+			if (students.get(i).name == n) {
+				System.out.println("Student name: " + students.get(i).name);
+				System.out.println("Age: " + students.get(i).age + "\n");
+				System.out.println("Disciplines:\n");
+				for (int j = 0; j < students.get(i).grades.size(); j++) {
+					System.out.println(students.get(i).grades.get(j).toString());
+				}
+			}
+		}
+	}
+	
+}
+
+
+ 
+class Main {
+	public static void main(String[] args)	{
+
+		Students.addStudent("Hermione Granger", 12);
+		Students.addStudent("Harry Potter", 12);
+		Students.addStudent("Ronald Weasley", 12);		
+
+		Students.addStudent("Ronald Weasley", 12);	
+		
+		Students.addGrade("Harry Potter", "HERBOLOGY", true);
+		Students.addGrade("Harry Potter", "CHARMS", 4);
+		
+		Students.addGrade("Ronald Weasley", "POTIONS", true);
+		Students.addGrade("Ronald Weasley", "CHARMS", 3);  //Рон троешник
+		
+		Students.addGrade("Hermione Granger", "ARITHMANCY", 4);	
+		Students.addGrade("Hermione Granger", "HERBOLOGY", true);		
+		Students.addGrade("Hermione Granger", "POTIONS", true);
+		Students.addGrade("Hermione Granger", "TRANSFIGURATION", 5);
+		Students.addGrade("Hermione Granger", "CHARMS", 5);  //У Гермионы есть маховик времени, она ходит на все уроки
+		
+
+
+		
+		System.out.println("----------------\n");
+		Students.printStudent("Hermione Granger");
+		System.out.println("-----------------\n");
+		Students.addGrade("Hermione Granger", "ARITHMANCY", 5); //Гермиона исправила четверку по нумерологии
+		Students.printStudent("Hermione Granger");
+		System.out.println("-----------------\n");
+		Students.printStudent("Ronald Weasley");
+		System.out.println("-----------------\n");
 	}
 }
