@@ -207,6 +207,7 @@ class Students {
 				Student s = students.get(i);
 				s.addGrade(discipline, gradeFloat);
 				finder = false;
+				break;
 			}
 		}
 		if (finder) { System.out.println("Error! Incorrect student name: " + name + "!"); }
@@ -220,6 +221,7 @@ class Students {
 				Student s = students.get(i);
 				s.addGrade(discipline, grade);
 				finder = false;
+				break;
 			}
 		}
 		if (finder) { System.out.println("Error! Incorrect student name: " + name + "!"); }
@@ -228,7 +230,10 @@ class Students {
 	static Student getStudent(String name) {
 		Student student = null;
 		for (int i = 0; i < students.size(); i++) { 
-			if (students.get(i).name == name) { student = students.get(i); }
+			if (students.get(i).name == name) { 
+				student = students.get(i);
+				break;
+			}
 		}
 		return student;
 	}
@@ -266,6 +271,7 @@ class Students {
 				if (students.get(i).grades.get(j).dis.toString() == discipline) {
 					System.out.println(students.get(i).name + ", graded " + students.get(i).grades.get(j).gradeToString() ); 
 					finder = false;
+					break;
 				}
 			}
 		}
